@@ -3,134 +3,272 @@ let dropMaker;
 let timerInterval;
 
 let score = 0;
-let timeLeft = 30;
+let timeLeft = 40;
+let goal = 15;
+
+let difficulty = "easy";
 
 const scoreDisplay = document.getElementById("score");
 const timeDisplay = document.getElementById("time");
+const goalDisplay = document.getElementById("goal");
 const startBtn = document.getElementById("start-btn");
 const gameContainer = document.getElementById("game-container");
 
 const winningMessages = [
-  "Amazing! You helped collect clean water for communities!",
-  "Great work! You are a clean water hero!",
-  "You won! Every drop makes an impact!"
+  "Amazing! You helped provide clean water!",
+  "Great job! Communities thank you!",
+  "You reached your goal! Every drop matters!"
 ];
 
 const losingMessages = [
-  "Good try! Every drop still counts.",
-  "Try again! You can collect more clean water next time.",
-  "Keep going! Communities are counting on clean water heroes."
+  "Keep trying! Every drop counts.",
+  "Nice effort! Let's collect even more clean water.",
+  "Don't give up! Communities still need your help."
 ];
+
+const milestoneMessages = [
+  "Great start!",
+  "You're making a difference!",
+  "Halfway there!",
+  "Almost there!",
+  "Amazing work!"
+];
+
+const clickSound = new Audio("sounds/click.mp3");
+const winSound = new Audio("sounds/win.mp3");
+
+document.querySelectorAll(".difficulty-btn").forEach(btn => {
+
+  btn.addEventListener("click", () => {
+
+    document.querySelectorAll(".difficulty-btn").forEach(b=>b.classList.remove("active"));
+
+    btn.classList.add("active");
+
+    difficulty = btn.dataset.mode;
+
+    if(difficulty==="easy"){
+      timeLeft=40;
+      goal=15;
+    }
+
+    if(difficulty==="normal"){
+      timeLeft=30;
+      goal=20;
+    }
+
+    if(difficulty==="hard"){
+      timeLeft=20;
+      goal=25;
+    }
+
+    goalDisplay.textContent=goal;
+    timeDisplay.textContent=timeLeft;
+
+  });
+
+});
 
 startBtn.addEventListener("click", startGame);
 
-function startGame() {
-  if (gameRunning) return;
+function startGame(){
 
-  gameRunning = true;
-  score = 0;
-  timeLeft = 30;
+  if(gameRunning) return;
 
-  scoreDisplay.textContent = score;
-  timeDisplay.textContent = timeLeft;
-  gameContainer.innerHTML = "";
-  startBtn.textContent = "Game Running...";
+  gameRunning=true;
 
-  dropMaker = setInterval(createDrop, 700);
+  score=0;
 
-  timerInterval = setInterval(function () {
-    timeLeft--;
-    timeDisplay.textContent = timeLeft;
+  scoreDisplay.textContent=score;
 
-    if (timeLeft <= 0) {
-      endGame();
+  if(difficulty==="easy"){
+      timeLeft=40;
+      goal=15;
+  }
+
+  if(difficulty==="normal"){
+      timeLeft=30;
+      goal=20;
+  }
+
+  if(difficulty==="hard"){
+      timeLeft=20;
+      goal=25;
+  }
+
+  goalDisplay.textContent=goal;
+  timeDisplay.textContent=timeLeft;
+
+  gameContainer.innerHTML="";
+
+  startBtn.textContent="Game Running...";
+
+  showMessage("Collect clean water before time runs out!");
+
+  let speed=700;
+
+  if(difficulty==="normal") speed=550;
+
+  if(difficulty==="hard") speed=420;
+
+  dropMaker=setInterval(createDrop,speed);
+
+  timerInterval=setInterval(()=>{
+
+      timeLeft--;
+
+      timeDisplay.textContent=timeLeft;
+
+      if(timeLeft<=0){
+
+          endGame();
+
+      }
+
+  },1000);
+
+}
+
+function createDrop(){
+
+    const drop=document.createElement("div");
+
+    const isBadDrop=Math.random()<0.25;
+
+    drop.className=isBadDrop?"water-drop bad-drop":"water-drop";
+
+    drop.textContent=isBadDrop?"✖":"💧";
+
+    const size=40+Math.random()*35;
+
+    drop.style.width=size+"px";
+
+    drop.style.height=size+"px";
+
+    drop.style.left=Math.random()*(gameContainer.offsetWidth-size)+"px";
+
+    let duration=4;
+
+    if(difficulty==="normal") duration=3;
+
+    if(difficulty==="hard") duration=2;
+
+    drop.style.animationDuration=duration+"s";
+
+    drop.addEventListener("pointerdown",()=>{
+
+        if(!gameRunning) return;
+
+        clickSound.play();
+
+        if(isBadDrop){
+
+            score=Math.max(0,score-2);
+
+            showMessage("Dirty water! -2");
+
+        }else{
+
+            score++;
+
+            showMessage("+1 Clean Water!");
+
+        }
+
+        scoreDisplay.textContent=score;
+
+        checkMilestones();
+
+        drop.remove();
+
+    });
+
+    gameContainer.appendChild(drop);
+
+    drop.addEventListener("animationend",()=>drop.remove());
+
+}
+
+function checkMilestones(){
+
+    if(score===5){
+
+        showMessage(milestoneMessages[0]);
+
     }
-  }, 1000);
-}
 
-function createDrop() {
-  const drop = document.createElement("div");
+    if(score===10){
 
-  const isBadDrop = Math.random() < 0.25;
+        showMessage(milestoneMessages[1]);
 
-  if (isBadDrop) {
-    drop.className = "water-drop bad-drop";
-    drop.textContent = "✖";
-  } else {
-    drop.className = "water-drop";
-    drop.textContent = "💧";
-  }
-
-  const initialSize = 60;
-  const sizeMultiplier = Math.random() * 0.8 + 0.5;
-  const size = initialSize * sizeMultiplier;
-  drop.style.width = drop.style.height = `${size}px`;
-
-  const gameWidth = gameContainer.offsetWidth;
-  const xPosition = Math.random() * (gameWidth - 60);
-  drop.style.left = xPosition + "px";
-  drop.style.animationDuration = "4s";
-
-  drop.addEventListener("pointerdown", function () {
-    if (!gameRunning) return;
-
-    if (isBadDrop) {
-      score = Math.max(0, score - 2);
-      showMessage("Oh no! Dirty water removed points.");
-    } else {
-      score++;
-      showMessage("+1 clean water drop!");
     }
 
-    scoreDisplay.textContent = score;
-    drop.remove();
-  });
+    if(score===15){
 
-  gameContainer.appendChild(drop);
+        showMessage(milestoneMessages[2]);
 
-  drop.addEventListener("animationend", () => {
-    drop.remove();
-  });
+    }
+
+    if(score===goal-3){
+
+        showMessage(milestoneMessages[3]);
+
+    }
+
 }
 
-function showMessage(text) {
-  let message = document.getElementById("game-message");
+function showMessage(text){
 
-  if (!message) {
-    message = document.createElement("p");
-    message.id = "game-message";
-    document.querySelector(".game-wrapper").appendChild(message);
-  }
+    document.getElementById("game-message").textContent=text;
 
-  message.textContent = text;
 }
 
-function endGame() {
-  gameRunning = false;
-  clearInterval(dropMaker);
-  clearInterval(timerInterval);
+function endGame(){
 
-  const win = score >= 20;
-  const messages = win ? winningMessages : losingMessages;
-  const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+    gameRunning=false;
 
-  if (win) {
-    showConfetti();
-  }
+    clearInterval(dropMaker);
 
-  showMessage(randomMessage + " Final Score: " + score);
-  startBtn.textContent = "Reset / Play Again";
+    clearInterval(timerInterval);
+
+    const win=score>=goal;
+
+    if(win){
+
+        showConfetti();
+
+        winSound.play();
+
+    }
+
+    const list=win?winningMessages:losingMessages;
+
+    const random=list[Math.floor(Math.random()*list.length)];
+
+    showMessage(random+" Final Score: "+score);
+
+    startBtn.textContent="Play Again";
+
 }
 
-function showConfetti() {
-  for (let i = 0; i < 25; i++) {
-    const confetti = document.createElement("div");
-    confetti.className = "confetti";
-    confetti.textContent = "🎉";
-    confetti.style.left = Math.random() * 100 + "%";
-    confetti.style.animationDuration = Math.random() * 2 + 2 + "s";
-    gameContainer.appendChild(confetti);
+function showConfetti(){
 
-    setTimeout(() => confetti.remove(), 3000);
-  }
+    for(let i=0;i<30;i++){
+
+        const confetti=document.createElement("div");
+
+        confetti.className="confetti";
+
+        confetti.textContent="🎉";
+
+        confetti.style.left=Math.random()*100+"%";
+
+        confetti.style.animationDuration=(2+Math.random()*2)+"s";
+
+        gameContainer.appendChild(confetti);
+
+        setTimeout(()=>confetti.remove(),3000);
+
+    }
+
 }

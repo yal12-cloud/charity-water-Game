@@ -6,11 +6,12 @@
 
 body {
   background: #fff7d6;
-  font-family: Arial, sans-serif;
+  font-family: "Nunito", "Avenir Next", Arial, sans-serif;
   min-height: 100vh;
   display: flex;
   justify-content: center;
   padding: 30px 10px;
+  color: #131313;
 }
 
 .game-wrapper {
@@ -29,12 +30,44 @@ body {
   font-size: 48px;
   color: #131313;
   margin-bottom: 8px;
+  font-weight: 800;
 }
 
 .game-tagline {
   color: #333;
   font-size: 18px;
   margin-bottom: 20px;
+}
+
+.difficulty-box {
+  background: white;
+  border: 3px solid #ffc907;
+  border-radius: 16px;
+  padding: 14px;
+  margin-bottom: 16px;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.10);
+}
+
+.difficulty-box p {
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+
+.difficulty-btn {
+  padding: 10px 16px;
+  margin: 4px;
+  border: 2px solid #2e9df7;
+  border-radius: 10px;
+  background: white;
+  color: #131313;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.difficulty-btn:hover,
+.difficulty-btn.active {
+  background: #2e9df7;
+  color: white;
 }
 
 .score-panel {
@@ -51,9 +84,10 @@ body {
 }
 
 .score,
-.timer {
-  font-size: 24px;
-  font-weight: bold;
+.timer,
+.goal {
+  font-size: 23px;
+  font-weight: 800;
 }
 
 #start-btn {
@@ -64,11 +98,21 @@ body {
   border-radius: 10px;
   cursor: pointer;
   font-size: 16px;
-  font-weight: bold;
+  font-weight: 800;
 }
 
 #start-btn:hover {
   background-color: #ffb700;
+}
+
+#game-message {
+  margin: 0 auto 18px;
+  background: white;
+  border: 3px solid #ffc907;
+  padding: 14px;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 800;
 }
 
 #game-container {
@@ -101,17 +145,7 @@ body {
 }
 
 .water-drop:hover {
-  transform: scale(1.1);
-}
-
-#game-message {
-  margin-top: 18px;
-  background: white;
-  border: 3px solid #ffc907;
-  padding: 15px;
-  border-radius: 12px;
-  font-size: 18px;
-  font-weight: bold;
+  filter: brightness(1.1);
 }
 
 .confetti {
@@ -119,6 +153,34 @@ body {
   top: -30px;
   font-size: 28px;
   animation: confettiFall linear forwards;
+}
+
+.footer {
+  margin-top: 22px;
+  background: white;
+  border: 3px solid #ffc907;
+  border-radius: 16px;
+  padding: 18px;
+  font-weight: 700;
+}
+
+.footer p {
+  margin-bottom: 12px;
+}
+
+.footer a {
+  display: inline-block;
+  margin: 6px 8px;
+  padding: 10px 14px;
+  background: #ffc907;
+  color: #131313;
+  text-decoration: none;
+  border-radius: 10px;
+  font-weight: 800;
+}
+
+.footer a:hover {
+  background: #ffb700;
 }
 
 @keyframes dropFall {
@@ -154,5 +216,9 @@ body {
 
   .logo {
     width: 190px;
+  }
+
+  .difficulty-btn {
+    width: 85%;
   }
 }

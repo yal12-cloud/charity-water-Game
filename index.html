@@ -1,26 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Water Drop Game</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Water Drop Game</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Avenir+Next:wght@400;700;800&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="game-wrapper">
-      <img src="img/cw_logo-horizontal.png" alt="charity: water logo" class="logo">
-        <h1 class="game-title">Water Drop</h1>
-        <p class="game-tagline">Catch the good drops, avoid the bad ones!</p>
-        <div class="score-panel">
-            <div class="score">Score: <span id="score">0</span></div>
-            <div class="timer">Time: <span id="time">30</span>s</div>
-            <button id="start-btn">Start Game</button>
-        </div>
-        
-        <div id="game-container">
-        </div>
+  <div class="game-wrapper">
+    <img src="img/cw_logo-horizontal.png" alt="charity: water logo" class="logo">
+
+    <h1 class="game-title">Water Drop Challenge</h1>
+    <p class="game-tagline">Collect clean water drops, avoid polluted drops, and reach the goal before time runs out!</p>
+
+    <div class="difficulty-box">
+      <p>Choose Difficulty:</p>
+      <button class="difficulty-btn active" data-mode="easy">Easy</button>
+      <button class="difficulty-btn" data-mode="normal">Normal</button>
+      <button class="difficulty-btn" data-mode="hard">Hard</button>
     </div>
-    
-    <script src="script.js"></script>
+
+    <div class="score-panel">
+      <div class="score">Score: <span id="score">0</span></div>
+      <div class="goal">Goal: <span id="goal">15</span> pts</div>
+      <div class="timer">Time: <span id="time">40</span>s</div>
+      <button id="start-btn">Start Game</button>
+    </div>
+
+    <p id="game-message">Choose a difficulty and press Start Game.</p>
+
+    <div id="game-container"></div>
+
+    <footer class="footer">
+      <p>Learn more about charity: water’s mission to bring clean water to communities.</p>
+      <a href="https://www.charitywater.org/" target="_blank">Visit charity: water</a>
+      <a href="https://www.charitywater.org/donate" target="_blank">Donate</a>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
